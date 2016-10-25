@@ -2,15 +2,36 @@
 $(function() {
 
     // Initialize Firebase
+	var config = {
+		apiKey: "AIzaSyBk_lbmH7XIHV6UTBQsRq34_NFZDeKnDaw",
+		authDomain: "exercise13-24382.firebaseapp.com",
+		databaseURL: "https://exercise13-24382.firebaseio.com",
+		storageBucket: "exercise13-24382.appspot.com",
+		messagingSenderId: "491511493502"
+	};
+	firebase.initializeApp(config);
+
+
 
     // Sign Up: Function to create account on firebase, then redirect to index.html
     var signUp = function() {
         // Get email, password, and display name
-
+        var email = $('#email').val();
+        var password = $("#password").val();
+        var name = $('#name').val();
 
         // Create user, then set the user's display name
-
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(function(user) {
                 // Set display name
+                user.updateProfile({
+                    displayName: name
+                }).then(function() {
+                    window.location = '/';
+                });
+            }).catch(function(error) {
+                alert(error.message);
+            });
 
     };
 
@@ -32,7 +53,16 @@ $(function() {
     };
 
     // Assign event lister to form submission
-
+    $('form').on('submit', function(event) {
+        event.preventDefault();
+        var formId = $(this).attr('id');
+        console.log(formId);
+        if (formId == 'sign-up') {
+            signUp();
+        } else if (formId == 'sign-in') {
+            signIn();
+        }
+    });
 
 
     // Assign click event to logout button
